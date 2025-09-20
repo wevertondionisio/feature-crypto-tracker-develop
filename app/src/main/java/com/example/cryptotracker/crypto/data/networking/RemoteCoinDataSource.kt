@@ -5,12 +5,18 @@ import com.example.cryptotracker.core.data.networking.Result
 import com.example.cryptotracker.core.data.networking.constructUrl
 import com.example.cryptotracker.core.data.networking.map
 import com.example.cryptotracker.core.domain.util.safeCall
+import com.example.cryptotracker.crypto.data.dto.CoinHistoryResponseDto
 import com.example.cryptotracker.crypto.domain.CoinDataSource
 import com.example.cryptotracker.crypto.data.dto.CoinResponseDto
-import com.example.cryptotracker.crypto.data.dto.toCoin
+import com.example.cryptotracker.crypto.data.mapping.toCoin
+import com.example.cryptotracker.crypto.data.mapping.toCoinPrice
 import com.example.cryptotracker.crypto.domain.model.Coin
+import com.example.cryptotracker.crypto.domain.model.CoinPrice
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class RemoteCoinDataSource(
     private val httpClient: HttpClient
@@ -18,10 +24,39 @@ class RemoteCoinDataSource(
     override suspend fun getCoins(): Result<List<Coin>, NetworkError> {
         return safeCall<CoinResponseDto> {
             httpClient.get(
-                urlString = constructUrl("/assets" + "?apiKey=c08f74ff2cd246e121366d35bc8deeacc13736bf738738a033481b7d9d942376")
+                urlString = constructUrl(
+                    url ="/assets"
+                )
             )
         }.map { response ->
             response.data.map { it.toCoin() }
+        }
+    }
+
+    override suspend fun getCoinHistory(
+        coinId: String,
+        start: ZonedDateTime,
+        end: ZonedDateTime
+    ): Result<List<CoinPrice>, NetworkError> {
+        val startMillis = start
+            .withZoneSameInstant(ZoneId.of("UTC"))
+            .toInstant()
+            .toEpochMilli()
+        val endMillis = end
+            .withZoneSameInstant(ZoneId.of("UTC"))
+            .toInstant()
+            .toEpochMilli()
+
+        return safeCall<CoinHistoryResponseDto> {
+            httpClient.get(
+                urlString = constructUrl("/assets/$coinId/history")
+            ) {
+                parameter("interval", "h6")
+                parameter("start", startMillis)
+                parameter("end", endMillis)
+            }
+        }.map { response ->
+            response.data.map { it.toCoinPrice() }
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.example.cryptotracker.crypto.domain.model.ui
 
 import androidx.annotation.DrawableRes
-import com.example.cryptotracker.R
 import com.example.cryptotracker.crypto.domain.model.Coin
+import com.example.cryptotracker.crypto.presentation.coin_detail.model.DataPoint
+import com.example.cryptotracker.crypto.presentation.util.getDrawableIdForCoin
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -14,7 +15,8 @@ data class CoinUi(
     val marketCapUsd: DisplayableNumber,
     val priceUsd: DisplayableNumber,
     val changePercent24Hr: DisplayableNumber,
-    @DrawableRes val iconRes: Int
+    @DrawableRes val iconRes: Int,
+    val coinPriceHistory: List<DataPoint> = emptyList()
 )
 
 data class DisplayableNumber(
@@ -31,14 +33,14 @@ fun Coin.toCoinUi(): CoinUi {
         marketCapUsd = marketCapUsd.toDisplayableNumber(),
         priceUsd = priceUsd.toDisplayableNumber(),
         changePercent24Hr = changePercent24Hr.toDisplayableNumber(),
-        iconRes = R.drawable.ic_launcher_background
+        iconRes = getDrawableIdForCoin(symbol)
     )
 }
 
-fun Double.toDisplayableNumber(): DisplayableNumber{
-    val formatted = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
-        maximumIntegerDigits = 2
-        minimumIntegerDigits = 2
+fun Double.toDisplayableNumber(): DisplayableNumber {
+    val formatted = NumberFormat.getCurrencyInstance(Locale.getDefault()).apply {
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
     }
 
     return DisplayableNumber(

@@ -21,6 +21,7 @@ import com.example.cryptotracker.crypto.presentation.coin_list.model.CoinListSta
 @Composable
 fun CoinListScreen(
     state: CoinListState,
+    onAction: (CoinListAction) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     if (state.isLoading) {
@@ -38,7 +39,7 @@ fun CoinListScreen(
             items(state.coins) { coinUi ->
                 CoinListItem(
                     coinUi = coinUi,
-                    onClick = { TODO() },
+                    onClick = { onAction(CoinListAction.OnCoinClick(coinUi)) },
                     modifier = modifier.fillMaxSize()
                 )
                 HorizontalDivider()
@@ -56,8 +57,7 @@ private fun CoinListScreenPrev() {
                 previewCoin.copy(id = it.toString())
             }
         ),
-        Modifier.background(
-            color = Color.White
-        )
+        modifier = Modifier.background(color = Color.White),
+        onAction = {},
     )
 }

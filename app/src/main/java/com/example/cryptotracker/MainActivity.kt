@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cryptotracker.core.domain.util.toErrorString
+import com.example.cryptotracker.crypto.presentation.CoinDetailScreen
 import com.example.cryptotracker.crypto.presentation.CoinListScreen
 import com.example.cryptotracker.crypto.presentation.coin_list.CoinListEvent
 import com.example.cryptotracker.crypto.presentation.coin_list.CoinListViewModel
 import com.example.cryptotracker.crypto.presentation.util.ObserveAsEvents
+import com.example.cryptotracker.navigation.AdaptiveCoinListDetailPane
 import com.example.cryptotracker.ui.theme.CryptoTrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -27,23 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CryptoTrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val viewModel = koinViewModel<CoinListViewModel>()
-                    val state by viewModel.state.collectAsStateWithLifecycle()
-                    val context = LocalContext.current
-                    ObserveAsEvents(events = viewModel.events) { event ->
-                        when(event) {
-                            is CoinListEvent.Error -> {
-                                Toast.makeText(
-                                    context,
-                                    event.error.toErrorString(context),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
-
-                    CoinListScreen(
-                        state = state,
+                    AdaptiveCoinListDetailPane(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
