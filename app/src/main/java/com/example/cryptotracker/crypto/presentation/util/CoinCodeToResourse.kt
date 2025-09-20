@@ -2,6 +2,19 @@ package com.example.cryptotracker.crypto.presentation.util
 
 import com.example.cryptotracker.R
 
+/**
+ * Maps cryptocurrency symbols to their corresponding drawable resource IDs.
+ *
+ * This utility function provides a centralized mapping between cryptocurrency
+ * symbols and their icon resources in the app. It handles case-insensitive
+ * matching by converting all symbols to uppercase.
+ *
+ * Note: If a symbol is not found in the mapping, it will return a default
+ * cryptocurrency icon to ensure the UI always displays something.
+ *
+ * @param symbol The cryptocurrency symbol (e.g., "BTC", "ETH")
+ * @return The drawable resource ID for the cryptocurrency's icon
+ */
 fun getDrawableIdForCoin(symbol: String): Int {
     return when (symbol.uppercase()) {
         "1INCH" -> R.drawable._inch

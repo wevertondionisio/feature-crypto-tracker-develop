@@ -18,12 +18,28 @@ import com.example.cryptotracker.crypto.presentation.coin_list.components.CoinLi
 import com.example.cryptotracker.crypto.presentation.coin_list.components.previewCoin
 import com.example.cryptotracker.crypto.presentation.coin_list.model.CoinListState
 
+/**
+ * Main screen composable that displays a list of cryptocurrencies.
+ *
+ * Features:
+ * - Lazy loading list with efficient recycling
+ * - Loading state indication
+ * - Interactive coin items with click handling
+ * - Visual dividers between items
+ * - Supports both light and dark themes
+ * - Handles empty and loading states
+ *
+ * @param state Current state of the coin list UI
+ * @param onAction Callback for handling user actions (e.g., coin selection)
+ * @param modifier Optional modifier for customizing the layout
+ */
 @Composable
 fun CoinListScreen(
     state: CoinListState,
     onAction: (CoinListAction) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    // Loading state display
     if (state.isLoading) {
         Box(
             modifier = modifier.fillMaxSize(),
@@ -32,14 +48,17 @@ fun CoinListScreen(
             CircularProgressIndicator()
         }
     } else {
+        // Main list content
         LazyColumn(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(state.coins) { coinUi ->
+            items(state.coins) { coin ->
                 CoinListItem(
-                    coinUi = coinUi,
-                    onClick = { onAction(CoinListAction.OnCoinClick(coinUi)) },
+                    coinUi = coin,
+                    onClick = {
+                        onAction(CoinListAction.OnCoinClick(coin))
+                    },
                     modifier = modifier.fillMaxSize()
                 )
                 HorizontalDivider()
@@ -48,12 +67,16 @@ fun CoinListScreen(
     }
 }
 
+/**
+ * Preview composable for CoinListScreen.
+ * Shows how the screen looks with sample data.
+ */
 @Preview
 @Composable
 private fun CoinListScreenPrev() {
     CoinListScreen(
         state = CoinListState(
-            coins = (1..100).map{
+            coins = (1..100).map {
                 previewCoin.copy(id = it.toString())
             }
         ),

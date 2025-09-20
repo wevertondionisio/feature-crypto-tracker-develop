@@ -2,8 +2,8 @@ package com.example.cryptotracker.crypto.presentation.coin_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cryptotracker.core.data.networking.onError
-import com.example.cryptotracker.core.data.networking.onSuccess
+import com.example.cryptotracker.core.domain.util.onError
+import com.example.cryptotracker.core.domain.util.onSuccess
 import com.example.cryptotracker.crypto.domain.CoinDataSource
 import com.example.cryptotracker.crypto.domain.model.ui.CoinUi
 import com.example.cryptotracker.crypto.domain.model.ui.toCoinUi
@@ -21,11 +21,27 @@ import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * ViewModel responsible for managing the cryptocurrency list screen's state and business logic.
+ *
+ * This ViewModel handles:
+ * - Loading and refreshing the list of cryptocurrencies
+ * - Managing the UI state for the coin list
+ * - Processing user actions and updating the UI accordingly
+ *
+ * @param coinDataSource The data source for fetching cryptocurrency information
+ */
 class CoinListViewModel(
     private val coinDataSource: CoinDataSource
 ): ViewModel() {
 
+    /** Holds the current UI state of the coin list screen */
     private val _state = MutableStateFlow(CoinListState())
+
+    /**
+     * Public state flow that emits updates to the UI state.
+     * Automatically loads coins when collecting starts.
+     */
     val state = _state
         .onStart {
             loadCoins()
@@ -36,9 +52,17 @@ class CoinListViewModel(
             CoinListState()
         )
 
+    /** Channel for one-time UI events like errors */
     private val _events = Channel<CoinListEvent>()
+
+    /** Flow of UI events that should be handled once */
     val events = _events.receiveAsFlow()
 
+    /**
+     * Handles user actions performed in the UI.
+     *
+     * @param action The action performed by the user
+     */
     fun onAction(action: CoinListAction) {
         when (action) {
             is CoinListAction.OnCoinClick -> {
@@ -47,6 +71,12 @@ class CoinListViewModel(
         }
     }
 
+    /**
+     * Selects a cryptocurrency and loads its price history.
+     * Updates the UI state with the selected coin and its historical price data.
+     *
+     * @param coinUi The coin selected by the user
+     */
     private fun selectCoin(coinUi: CoinUi) {
         _state.update { it.copy(selectedCoin = coinUi) }
         viewModelScope.launch {
@@ -85,6 +115,11 @@ class CoinListViewModel(
         }
     }
 
+    /**
+     * Loads the list of available cryptocurrencies.
+     * Updates the UI state with loading status and results.
+     * Emits error events if the loading fails.
+     */
     private fun loadCoins() {
         viewModelScope.launch {
             _state.update {

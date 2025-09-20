@@ -45,6 +45,21 @@ import com.example.cryptotracker.crypto.presentation.coin_detail.model.DataPoint
 import com.example.cryptotracker.crypto.presentation.coin_list.components.previewCoin
 import com.example.cryptotracker.crypto.presentation.coin_list.model.CoinListState
 
+/**
+ * A screen composable that displays detailed information about a selected cryptocurrency.
+ *
+ * Features:
+ * - Interactive price chart with animation support
+ * - Responsive layout with FlowRow for adaptive content arrangement
+ * - Dark/Light theme support
+ * - Loading state indication
+ * - Scrollable content with verticalScroll
+ * - Animated visibility transitions
+ * - Adaptive aspect ratio for chart display
+ *
+ * @param state The state of the coin list, including the selected coin's details
+ * @param modifier Optional modifier for customizing the layout
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CoinDetailScreen(
@@ -52,6 +67,7 @@ fun CoinDetailScreen(
     modifier: Modifier = Modifier
 ) {
     if (state.isLoading) {
+        // Loading state display
         Box(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -61,16 +77,19 @@ fun CoinDetailScreen(
     } else if (state.selectedCoin != null) {
         val coin = state.selectedCoin
 
+        // Theme-aware color definition
         val defineColor = if(isSystemInDarkTheme()) Color.White
         else Color.Unspecified
 
-        Column (
+        // Main content column
+        Column(
             modifier = modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
+            // Header section with coin icon and details
             Icon(
                 imageVector = ImageVector.vectorResource(id = coin.iconRes),
                 contentDescription = coin.name,
@@ -129,9 +148,11 @@ fun CoinDetailScreen(
                     contentColor = contentColor
                 )
             }
+            // Price chart section with adaptive visibility
             AnimatedVisibility(
                 visible = coin.coinPriceHistory.isNotEmpty()
             ) {
+                // Chart state management
                 var selectedDataPoint by remember {
                     mutableStateOf<DataPoint?>(null)
                 }
@@ -141,6 +162,8 @@ fun CoinDetailScreen(
                 var totalChartWidth by remember {
                     mutableFloatStateOf(0f)
                 }
+
+                // Calculate visible data points based on available width
                 val amountOfVisibleDataPoints = if (labelWidth > 0) {
                     ((totalChartWidth - 2.5 * labelWidth) / labelWidth).toInt()
                 } else {
@@ -148,6 +171,8 @@ fun CoinDetailScreen(
                 }
                 val startIndex = (coin.coinPriceHistory.lastIndex - amountOfVisibleDataPoints)
                     .coerceAtLeast(0)
+
+                // Interactive price chart
                 LineChart(
                     dataPoints = coin.coinPriceHistory,
                     style = ChartStyle(
@@ -181,6 +206,10 @@ fun CoinDetailScreen(
     }
 }
 
+/**
+ * Preview composable for CoinDetailScreen in both light and dark themes.
+ * Demonstrates the screen layout with sample data.
+ */
 @PreviewLightDark()
 @Composable
 private fun CoinDetailScreenPrev() {

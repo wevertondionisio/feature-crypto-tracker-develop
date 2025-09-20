@@ -21,6 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cryptotracker.crypto.domain.model.ui.DisplayableNumber
 
+/**
+ * A composable that displays the price change percentage with a visual indicator.
+ *
+ * Features:
+ * - Shows price change with up/down arrow
+ * - Color-coded background (green for positive, red for negative changes)
+ * - Automatically formats the percentage value
+ * - Rounded corner design
+ *
+ * @param change The price change value to display, wrapped in DisplayableNumber
+ * @param modifier Optional modifier for customizing the layout
+ */
 @Composable
 fun PriceChange(
     change: DisplayableNumber,
@@ -69,4 +81,3 @@ private fun PriceChangePrev() {
         )
     )
 }
-

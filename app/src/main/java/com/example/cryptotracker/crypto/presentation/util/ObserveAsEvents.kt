@@ -9,6 +9,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
+/**
+ * A lifecycle-aware composable that observes a Flow as one-time events.
+ *
+ * This utility helps handle events that should only be processed once,
+ * such as navigation events, error messages, or other one-shot operations.
+ * Events are only collected when the lifecycle is in STARTED state or above.
+ *
+ * @param T The type of events being observed
+ * @param events The Flow of events to observe
+ * @param key1 Optional key for restarting the effect
+ * @param key2 Optional secondary key for restarting the effect
+ * @param onEvent Callback invoked for each event
+ */
 @Composable
 fun <T> ObserveAsEvents(
     events: Flow<T>,

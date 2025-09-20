@@ -11,12 +11,25 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
+/**
+ * Theme configuration for the CryptoTracker app.
+ * Implements Material3 design system with dynamic color support.
+ */
+
+/**
+ * Dark theme color scheme with crypto-themed colors.
+ * Uses purple and pink accents for a modern financial app look.
+ */
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
     tertiary = Pink80
 )
 
+/**
+ * Light theme color scheme with crypto-themed colors.
+ * Uses lighter variants of purple and pink for daytime usage.
+ */
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
@@ -33,6 +46,19 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+/**
+ * Main theme composable that wraps the app's content.
+ *
+ * Features:
+ * - Dynamic color support on Android 12+
+ * - Automatic dark/light theme switching
+ * - Material3 design system integration
+ * - System UI color harmonization
+ *
+ * @param darkTheme Whether to use dark theme colors
+ * @param dynamicColor Whether to use dynamic system colors (Android 12+)
+ * @param content The composable content to theme
+ */
 @Composable
 fun CryptoTrackerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

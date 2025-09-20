@@ -28,6 +28,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cryptotracker.R
 
+/**
+ * A card component that displays cryptocurrency information in a visually appealing way.
+ *
+ * Features:
+ * - Animated content transitions
+ * - Material Design card with customizable border and shadow
+ * - Displays an icon, title, and value
+ * - Supports both light and dark themes
+ * - Customizable text alignment and styling
+ *
+ * @param title The header text to display in the card
+ * @param value The main value or information to display
+ * @param iconRes Resource ID for the icon to display
+ * @param modifier Optional modifier for customizing the layout
+ * @param textAlign Optional alignment for the text content
+ */
 @Composable
 fun InfoCard(
     title: String,

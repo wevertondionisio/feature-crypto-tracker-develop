@@ -10,9 +10,25 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+/**
+ * Koin dependency injection module configuration for the application.
+ * This module provides all the necessary dependencies for the app to function.
+ */
 val appModule = module {
+    /**
+     * HTTP Client singleton for making network requests.
+     * Uses CIO (Coroutine I/O) engine for efficient networking.
+     */
     single { HttpClientFactory.create(CIO.create()) }
+
+    /**
+     * Data source for cryptocurrency information.
+     * Binds RemoteCoinDataSource implementation to CoinDataSource interface.
+     */
     singleOf(::RemoteCoinDataSource).bind<CoinDataSource>()
 
+    /**
+     * ViewModel for the cryptocurrency list screen.
+     */
     viewModelOf(::CoinListViewModel)
 }

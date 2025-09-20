@@ -1,9 +1,15 @@
-package com.example.cryptotracker.core.domain.util
+package com.example.cryptotracker.core.data.networking
 
 import android.content.Context
 import com.example.cryptotracker.R
-import com.example.cryptotracker.core.data.networking.NetworkError
+import com.example.cryptotracker.core.domain.util.NetworkError
 
+/**
+ * Extension function that converts NetworkError enum values to user-friendly error messages.
+ *
+ * @param context Android Context used to retrieve localized string resources
+ * @return A localized string message describing the network error
+ */
 fun NetworkError.toErrorString(context: Context): String  {
     val resId = when(this) {
         NetworkError.REQUEST_TIMEOUT -> R.string.error_request_timeout

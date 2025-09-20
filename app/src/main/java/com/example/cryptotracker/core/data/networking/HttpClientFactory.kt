@@ -11,8 +11,28 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
+/**
+ * Factory object for creating and configuring Ktor HTTP clients.
+ *
+ * Provides centralized configuration for:
+ * - Logging with custom KtorLogger
+ * - JSON content negotiation
+ * - Default request configuration
+ * - Error handling
+ */
 object HttpClientFactory {
-
+    /**
+     * Creates a configured HttpClient instance.
+     *
+     * Configuration includes:
+     * - Logging at ALL level with custom logger
+     * - JSON content negotiation with lenient parsing
+     * - Default request headers and content type
+     * - Pretty printing for debug purposes
+     *
+     * @param engine The HTTP engine to use (e.g., CIO, OkHttp)
+     * @return Configured HttpClient instance
+     */
     fun create(engine: HttpClientEngine): HttpClient {
         return HttpClient(engine) {
             install(Logging) {

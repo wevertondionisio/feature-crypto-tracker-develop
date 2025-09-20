@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3AdaptiveApi::class)
 
-package com.example.cryptotracker.navigation
+package com.example.cryptotracker.core.navigation
 
 import android.widget.Toast
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -13,7 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.cryptotracker.core.domain.util.toErrorString
+import com.example.cryptotracker.core.data.networking.toErrorString
 import com.example.cryptotracker.crypto.presentation.CoinDetailScreen
 import com.example.cryptotracker.crypto.presentation.CoinListAction
 import com.example.cryptotracker.crypto.presentation.CoinListScreen
@@ -22,6 +22,20 @@ import com.example.cryptotracker.crypto.presentation.coin_list.CoinListViewModel
 import com.example.cryptotracker.crypto.presentation.util.ObserveAsEvents
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * Adaptive layout composable that implements a list-detail pattern for cryptocurrency display.
+ * Uses Material3's adaptive navigation components for responsive layouts across different screen sizes.
+ *
+ * Features:
+ * - Responsive layout adaptation between list and detail views
+ * - Smooth animations during transitions
+ * - Integration with CoinListViewModel for state management
+ * - Error handling with toast messages
+ * - Event-based navigation
+ *
+ * @param modifier Optional modifier for customizing the layout
+ * @param viewModel ViewModel instance for managing cryptocurrency data and UI state
+ */
 @Composable
 fun AdaptiveCoinListDetailPane(
     modifier: Modifier = Modifier,

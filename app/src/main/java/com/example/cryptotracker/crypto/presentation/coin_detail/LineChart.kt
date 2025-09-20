@@ -37,6 +37,26 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+/**
+ * A custom line chart composable for displaying cryptocurrency price history.
+ *
+ * Features:
+ * - Interactive price chart with drag gesture support
+ * - Dynamic scaling based on data points
+ * - Customizable appearance through ChartStyle
+ * - X and Y axis labels
+ * - Touch indicator for precise price reading
+ *
+ * @param dataPoints List of data points to be displayed in the chart
+ * @param style Styling configuration for the chart
+ * @param visibleDataPointsIndices Range of indices indicating which data points are currently visible
+ * @param unit The unit to display with values (e.g., "$")
+ * @param modifier Modifier for the composable
+ * @param selectedDataPoint Currently selected data point, if any
+ * @param onSelectedDataPoint Callback when a data point is selected
+ * @param onXLabelWidthChange Callback when the width of X-axis labels changes
+ * @param showHelperLines Whether to show grid lines in the chart
+ */
 @Composable
 fun LineChart(
   dataPoints: List<DataPoint>,
@@ -334,6 +354,14 @@ fun LineChart(
     }
 }
 
+/**
+ * Calculates the index of the selected data point based on touch position.
+ *
+ * @param touchOffsetX The X coordinate of the touch position
+ * @param triggerWidth The width of the touch trigger area
+ * @param drawPoints List of data points with their drawing coordinates
+ * @return Index of the selected data point, or -1 if none is selected
+ */
 private fun getSelectedDataPointIndex(
     touchOffsetX: Float,
     triggerWidth: Float,

@@ -27,6 +27,19 @@ import com.example.cryptotracker.crypto.domain.model.Coin
 import com.example.cryptotracker.crypto.domain.model.ui.CoinUi
 import com.example.cryptotracker.crypto.domain.model.ui.toCoinUi
 
+/**
+ * A composable that displays a single cryptocurrency item in the list.
+ *
+ * Features:
+ * - Displays coin icon, name, and symbol
+ * - Shows current price and 24h price change
+ * - Supports click interaction
+ * - Adapts to light/dark theme
+ *
+ * @param coin The cryptocurrency data to display
+ * @param onClick Callback invoked when the item is clicked
+ * @param modifier Optional modifier for customizing the layout
+ */
 @Composable
 fun CoinListItem(
     coinUi: CoinUi,

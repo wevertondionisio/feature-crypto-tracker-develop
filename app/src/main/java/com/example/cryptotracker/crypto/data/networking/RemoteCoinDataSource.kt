@@ -1,10 +1,10 @@
 package com.example.cryptotracker.crypto.data.networking
 
-import com.example.cryptotracker.core.data.networking.NetworkError
-import com.example.cryptotracker.core.data.networking.Result
+import com.example.cryptotracker.core.domain.util.NetworkError
+import com.example.cryptotracker.core.domain.util.Result
 import com.example.cryptotracker.core.data.networking.constructUrl
-import com.example.cryptotracker.core.data.networking.map
-import com.example.cryptotracker.core.domain.util.safeCall
+import com.example.cryptotracker.core.domain.util.map
+import com.example.cryptotracker.core.data.networking.safeCall
 import com.example.cryptotracker.crypto.data.dto.CoinHistoryResponseDto
 import com.example.cryptotracker.crypto.domain.CoinDataSource
 import com.example.cryptotracker.crypto.data.dto.CoinResponseDto
@@ -18,9 +18,26 @@ import io.ktor.client.request.parameter
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
+/**
+ * Network implementation of CoinDataSource that fetches cryptocurrency data from a remote API.
+ *
+ * Features:
+ * - Asynchronous API communication using Ktor
+ * - Safe error handling with Result type
+ * - Data mapping from DTOs to domain models
+ * - Support for both real-time and historical data
+ *
+ * @property httpClient Configured Ktor HTTP client for making requests
+ */
 class RemoteCoinDataSource(
     private val httpClient: HttpClient
 ): CoinDataSource {
+    /**
+     * Fetches the current list of cryptocurrencies from the API.
+     * Maps the response from DTO to domain models and handles errors.
+     *
+     * @return Result containing either a list of Coin objects or a NetworkError
+     */
     override suspend fun getCoins(): Result<List<Coin>, NetworkError> {
         return safeCall<CoinResponseDto> {
             httpClient.get(
@@ -33,6 +50,15 @@ class RemoteCoinDataSource(
         }
     }
 
+    /**
+     * Fetches historical price data for a specific cryptocurrency.
+     * Includes time range filtering and timezone handling.
+     *
+     * @param coinId The ID of the cryptocurrency to fetch history for
+     * @param start Start time for historical data
+     * @param end End time for historical data
+     * @return Result containing either a list of historical prices or a NetworkError
+     */
     override suspend fun getCoinHistory(
         coinId: String,
         start: ZonedDateTime,
