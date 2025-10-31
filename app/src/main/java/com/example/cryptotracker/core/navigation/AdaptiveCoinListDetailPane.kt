@@ -3,6 +3,10 @@
 package com.example.cryptotracker.core.navigation
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
@@ -61,8 +65,10 @@ fun AdaptiveCoinListDetailPane(
         navigator = navigator,
         listPane = {
             AnimatedPane {
+                val statusBarsPadding = WindowInsets.statusBars.asPaddingValues()
                 CoinListScreen(
                     state = state,
+                    modifier = Modifier.padding(statusBarsPadding),
                     onAction = { action ->
                         viewModel.onAction(action)
                         when(action) {
@@ -78,7 +84,10 @@ fun AdaptiveCoinListDetailPane(
         },
         detailPane = {
             AnimatedPane {
-                CoinDetailScreen(state = state)
+                CoinDetailScreen(
+                    state = state,
+                    navigator = navigator,
+                )
             }
         },
         modifier = modifier
